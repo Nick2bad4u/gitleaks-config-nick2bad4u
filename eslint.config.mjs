@@ -4,10 +4,10 @@ import nickTwoBadFourU from "eslint-config-nick2bad4u";
 const config = [
     ...nickTwoBadFourU.configs.all,
     {
-        files: ["index.cjs"],
+        files: ["gitleaks.toml"],
         rules: {
-            "module-interop/no-cjs-exports": "off",
-            "unicorn/prefer-module": "off",
+            "toml/array-bracket-spacing": "off",
+            "toml/array-element-newline": "off",
         },
     },
 ];
