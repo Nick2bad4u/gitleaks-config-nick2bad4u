@@ -1,0 +1,35 @@
+title = "Nick2bad4u shared Gitleaks configuration"
+
+[extend]
+useDefault = true
+disabledRules = ["generic-api-key"]
+
+[[allowlists]]
+description = "Ignore generated package manager and build output paths"
+paths = ['''(^|/)package-lock\.json$''', '''(^|/)dist/''', '''(^|/)coverage/''', '''(^|/)\.cache/''']
+
+[[rules]]
+id = "node-auth-token-assignment"
+description = "Detect hardcoded npm authentication token assignments"
+regex = '''(?i)(?:NPM_TOKEN|NODE_AUTH_TOKEN|NPM_AUTH_TOKEN)\s*[:=]\s*["']?([A-Za-z0-9_\-]{20,})["']?'''
+secretGroup = 1
+keywords = ["auth_token", "node_auth_token", "npm_auth_token", "npm_token"]
+tags = ["npm", "package-manager", "token"]
+
+[[rules.allowlists]]
+description = "Allow documented placeholders"
+regexTarget = "secret"
+regexes = ['''(?i)^(example|placeholder|sample|test|token|your_token_here)$''']
+
+[[rules]]
+id = "github-actions-secret-literal"
+description = "Detect literal secret-looking values in GitHub Actions environment assignments"
+regex = '''(?i)(?:CODECOV_TOKEN|GITHUB_TOKEN|GH_TOKEN|ACTIONS_RUNTIME_TOKEN)\s*[:=]\s*["']?([A-Za-z0-9_\-]{24,})["']?'''
+secretGroup = 1
+keywords = ["actions_runtime_token", "codecov_token", "gh_token", "github_token"]
+tags = ["ci", "github-actions", "token"]
+
+[[rules.allowlists]]
+description = "Allow GitHub Actions secret expressions and examples"
+regexTarget = "match"
+regexes = ['''\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}''', '''(?i)(example|placeholder|sample|test)''']
