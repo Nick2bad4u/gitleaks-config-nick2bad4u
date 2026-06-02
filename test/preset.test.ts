@@ -19,15 +19,18 @@ describe("gitleaks-config-nick2bad4u", () => {
         expect(resolveConfigPath()).toBe(configPath);
     });
 
-    it("extends the built-in Gitleaks rules and keeps custom token rules", async () => {
-        expect.assertions(5);
+    it("extends the built-in Gitleaks rules and keeps source custom rules", async () => {
+        expect.assertions(8);
 
         const config = await readFile(configPath, "utf8");
 
         expect(config).toContain("[extend]");
         expect(config).toContain("useDefault = true");
-        expect(config).toContain("node-auth-token-assignment");
-        expect(config).toContain("github-actions-secret-literal");
+        expect(config).toContain("electron-config-secrets");
+        expect(config).toContain("database-connection-strings");
+        expect(config).toContain("vite-env-secrets");
+        expect(config).toContain("anthropic-enhanced-detection");
+        expect(config).toContain("perplexity-api-detection");
         expect(config).not.toContain("Uptime Watcher");
     });
 });
