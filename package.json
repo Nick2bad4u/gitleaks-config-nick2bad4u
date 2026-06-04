@@ -81,14 +81,6 @@
         "update-deps": "npx ncu -i --install never && npm update --force && npm install --force && npm run sync:node-version-files",
         "verify": "npm run release:verify"
     },
-    "overrides": {
-        "remark-lint-frontmatter-schema": {
-            "@apidevtools/json-schema-ref-parser": "11.9.3",
-            "ajv": "8.20.0",
-            "minimatch": "9.0.9",
-            "yaml": "2.9.0"
-        }
-    },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.3",
         "@types/node": "^25.9.1",
@@ -102,10 +94,10 @@
         "prettier": "^3.8.3",
         "prettier-config-nick2bad4u": "^1.0.13",
         "publint": "^0.3.21",
-        "remark-config-nick2bad4u": "^1.0.3",
+        "remark-config-nick2bad4u": "^1.0.5",
         "secretlint": "^13.0.2",
         "secretlint-config-nick2bad4u": "^1.1.0",
-        "sort-package-json": "^3.6.1",
+        "sort-package-json": "^4.0.0",
         "typescript": "^6.0.3",
         "vite": "^8.0.16",
         "vitest": "^4.1.8"
