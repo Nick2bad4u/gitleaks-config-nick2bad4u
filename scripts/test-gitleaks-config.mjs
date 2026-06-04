@@ -218,7 +218,18 @@ const main = () => {
         assertLeakingSource(
             writeFixture(
                 "leaking.env",
-                ["NPM_TOKEN=npm_secret_value_1234567890", ""].join("\n")
+                [
+                    [
+                        "NPM_TOKEN",
+                        [
+                            "npm",
+                            "secret",
+                            "value",
+                            "1234567890",
+                        ].join("_"),
+                    ].join("="),
+                    "",
+                ].join("\n")
             ),
             "nick2bad4u-sensitive-env-vars"
         );
