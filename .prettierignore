@@ -47,3 +47,5 @@ sonar-project.properties
 .taplo.toml
 cliff.toml
 lychee.toml
+# tombi formatting is nicer
+gitleaks.toml
