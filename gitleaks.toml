@@ -1,27 +1,15 @@
-# Gitleaks Configuration for Nick2bad4u shared TypeScript projects
-# Modern configuration following Gitleaks v8.28+ best practices with latest rules
+# Gitleaks configuration for Nick2bad4u shared TypeScript projects.
 # See: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
 title = "Nick2bad4u shared secret detection configuration"
+minVersion = "v8.25.0"
 
-# Extend the default Gitleaks configuration with modern v8.28+ rules
-# The default configuration includes comprehensive patterns for:
-# - API keys (AWS, Azure, GCP, GitHub, etc.)
-# - Database credentials
-# - Authentication tokens
-# - Certificates and private keys
-# - Service-specific secrets
-# - New AI platform keys (OpenAI, Anthropic, etc.)
+# Extend the built-in Gitleaks defaults instead of replacing them.
 [extend]
 useDefault = true
 
-# Disable overly broad rules that generate false positives
-# in JavaScript/TypeScript development environments
+# The generic rule is intentionally noisy for JavaScript/TypeScript config
+# packages. Keep high-confidence provider rules from the default config.
 disabledRules = ["generic-api-key"]
-
-# Performance optimizations enabled by default in v8.28+
-# - Stopword optimization (promoted from experimental)
-# - Fragment newline calculation optimization
-# - Enhanced allowlist processing
 
 # Global allowlists for generated artifacts and known-safe files.
 [[allowlists]]
@@ -29,20 +17,6 @@ description = "Ignore generated TypeDoc JSON output"
 paths = ['''^docs/typedoc\.json$''']
 
 # Custom rules for project-specific patterns
-[[rules]]
-id = "electron-config-secrets"
-description = "Detect hardcoded secrets in Electron configuration files"
-regex = '''(?i)(electron[_-]?(?:secret|key|token|password|credential))\s*[:=]\s*["']?([a-zA-Z0-9]{16,})["']?'''
-secretGroup = 2
-keywords = ["electron", "key", "password", "secret", "token"]
-tags = ["configuration", "electron", "secrets"]
-
-[[rules.allowlists]]
-description = "Allow example values in documentation"
-paths = ['''docs/.*\.(md|txt|rst)$''']
-regexTarget = "secret"
-regexes = ['''(?i)(example|demo|placeholder|test|sample)''']
-
 [[rules]]
 id = "database-connection-strings"
 description = "Detect database connection strings with embedded credentials"
@@ -58,11 +32,24 @@ regexTarget = "secret"
 regexes = ['''(?i)(example|localhost|127\.0\.0\.1|test|demo)''']
 
 [[rules]]
+id = "nick2bad4u-sensitive-env-vars"
+description = "Detect sensitive Nick2bad4u environment variable assignments"
+regex = '''(?i)(?:\$env:|["']?)(NODE_AUTH_TOKEN|SONAR_TOKEN|NPM_TOKEN|PRIVATE_TOKEN|GOOGLE_API_KEY|CODECOV_TOKEN(?:_FFV)?|STRYKER_DASHBOARD_API_KEY|(?:UW|TF)_STRYKER_DASHBOARD_API_KEY|PAT_TOKEN|GITHUB_TOKEN|GITHUB_PAT|PSGalleryApiKey|NuGetApiKey|NUGET_KEY|LASTFM_API_KEY|LASTFM_API_SECRET|WAKATIME_API_KEY|STRAVA_(?:ACCESS|REFRESH)_TOKEN|POSH_OWM_API_KEY|OLLAMA_API_KEY|UPTIME_WATCHER_GOOGLE_CLIENT_SECRET)(?:["']?\s*[:=]\s*|["']?\s*,\s*)["']?([A-Za-z0-9+/_=.-]{8,})["']?'''
+secretGroup = 2
+keywords = ["API_KEY", "CLIENT_SECRET", "PAT", "SECRET", "TOKEN"]
+tags = ["environment", "powershell", "secrets"]
+
+[[rules.allowlists]]
+description = "Allow obvious placeholder values"
+regexTarget = "secret"
+regexes = ['''(?i)(development|dev|test|local|localhost|example|demo|placeholder)''']
+
+[[rules]]
 id = "vite-env-secrets"
 description = "Detect secrets in Vite environment variable definitions"
-regex = '''(?i)VITE_(?:API_|SECRET_|PASSWORD_|TOKEN_|KEY_)[A-Z0-9_]*\s*[:=]\s*["']?([a-zA-Z0-9+/=]{16,})["']?'''
+regex = '''(?i)\bVITE_[A-Z0-9_]*(?:CLIENT_SECRET|PRIVATE_KEY|PASSWORD|SECRET|TOKEN)[A-Z0-9_]*\s*[:=]\s*["']?([a-zA-Z0-9+/_=.-]{16,})["']?'''
 secretGroup = 1
-keywords = ["api_", "key_", "password_", "secret_", "token_", "vite_"]
+keywords = ["VITE_", "CLIENT_SECRET", "PASSWORD", "PRIVATE_KEY", "SECRET", "TOKEN"]
 tags = ["environment", "frontend", "secrets", "vite"]
 
 [[rules.allowlists]]
@@ -72,18 +59,3 @@ regexes = [
     '''(?i)(development|dev|test|local|localhost|example|demo|placeholder)''',
     '''^(true|false|1|0|yes|no|enabled|disabled)$''',
 ]
-
-# Enhanced AI platform detection rules (v8.28+ features)
-[[rules]]
-id = "anthropic-enhanced-detection"
-description = "Enhanced detection for Anthropic API keys including all variants"
-regex = '''\b(sk-ant-(?:api03|admin01)-[a-zA-Z0-9_\-]{93}AA)(?:[\x60'"\s;]|\\[nr]|$)'''
-keywords = ["sk-ant-admin01", "sk-ant-api03"]
-tags = ["ai", "anthropic", "api-key"]
-
-[[rules]]
-id = "perplexity-api-detection"
-description = "Detect Perplexity AI API keys"
-regex = '''\b(pplx-[a-zA-Z0-9]{48})(?:[\x60'"\s;]|\\[nr]|$)'''
-keywords = ["pplx-"]
-tags = ["ai", "api-key", "perplexity"]
