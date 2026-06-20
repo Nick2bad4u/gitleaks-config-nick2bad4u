@@ -29,15 +29,17 @@ describe("gitleaks-config-nick2bad4u", () => {
         expect.assertions(10);
 
         const config = await readFile(configPath, "utf8");
-        const ruleIds = Array.from(
-            config.matchAll(/^id = "(?<ruleId>[^"]+)"$/gmv),
-            ({ groups }) => groups?.["ruleId"]
-        ).filter((ruleId): ruleId is string => ruleId !== undefined);
+        const ruleIds = config
+            .split("\n")
+            .map((line) => line.trim())
+            .filter((line) => line.startsWith("id"))
+            .map((line) => line.split("=", 2)[1]?.trim().slice(1, -1))
+            .filter((ruleId): ruleId is string => ruleId !== undefined);
 
         expect(config).toContain('minVersion = "v8.25.0"');
         expect(config).toContain("[extend]");
         expect(config).toContain("useDefault = true");
-        expect(config).toContain('disabledRules = ["generic-api-key"]');
+        expect(config).toContain('disabledRules = [ "generic-api-key" ]');
         expect(config).toContain("[[allowlists]]");
         expect(ruleIds).toStrictEqual(
             expect.arrayContaining([...expectedCustomRuleIds])
