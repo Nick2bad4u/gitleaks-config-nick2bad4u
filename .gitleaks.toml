@@ -3,4 +3,4 @@
 title = "Nick2bad4u shared config repository secret detection"
 
 [extend]
-    path = "gitleaks.toml"
+path = "gitleaks.toml"
