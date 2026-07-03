@@ -39,7 +39,9 @@ describe("gitleaks-config-nick2bad4u", () => {
         expect(config).toContain('minVersion = "v8.25.0"');
         expect(config).toContain("[extend]");
         expect(config).toContain("useDefault = true");
-        expect(config).toContain('disabledRules = [ "generic-api-key" ]');
+        expect(config).toMatch(
+            /disabledRules\s*=\s*\[\s*"generic-api-key"\s*\]/v
+        );
         expect(config).toContain("[[allowlists]]");
         expect(ruleIds).toStrictEqual(
             expect.arrayContaining([...expectedCustomRuleIds])

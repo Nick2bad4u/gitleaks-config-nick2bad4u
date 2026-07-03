@@ -16,6 +16,13 @@ const config = [
         tsconfigPaths: ["./tsconfig.eslint.json"],
     }),
     {
+        files: ["**/*.toml"],
+        rules: {
+            // Tombi 1.1.7 formats the same TOML differently on Windows and Linux.
+            "tombi/tombi": "off",
+        },
+    },
+    {
         files: ["gitleaks.toml"],
         rules: {
             "toml/array-bracket-spacing": "off",
