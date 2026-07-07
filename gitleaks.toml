@@ -2,6 +2,7 @@
 # See: https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
 # This file is intentionally named `gitleaks.toml` instead of `.gitleaks.toml` to avoid being automatically picked up by Gitleaks in this repository.
 # Consumers should reference it directly via `--config` or `GITLEAKS_CONFIG` to ensure it doesn't accidentally get overridden by a local `.gitleaks.toml`.
+"$schema"  = "https://json.schemastore.org/gitleaks.json"
 title      = "Nick2bad4u shared secret detection configuration"
 minVersion = "v8.25.0"
 

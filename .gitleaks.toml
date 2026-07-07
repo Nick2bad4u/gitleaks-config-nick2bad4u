@@ -1,5 +1,6 @@
 # Local repository scan config. Keep this pointed at the packaged shared
 # configuration so CI exercises the same rules consumers install.
+"$schema" = "https://json.schemastore.org/gitleaks.json"
 title = "Nick2bad4u shared config repository secret detection"
 
 [extend]
