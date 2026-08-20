@@ -37,7 +37,7 @@ minVersion = "v8.25.0"
 [[rules]]
     id          = "nick2bad4u-sensitive-env-vars"
     description = "Detect sensitive Nick2bad4u environment variable assignments"
-    regex       = '''(?i)(?:\$env:|["']?)(NODE_AUTH_TOKEN|SONAR_TOKEN|NPM_TOKEN|PRIVATE_TOKEN|GOOGLE_API_KEY|CODECOV_TOKEN(?:_FFV)?|STRYKER_DASHBOARD_API_KEY|(?:UW|TF)_STRYKER_DASHBOARD_API_KEY|PAT_TOKEN|GITHUB_TOKEN|GITHUB_PAT|PSGalleryApiKey|NuGetApiKey|NUGET_KEY|LASTFM_API_KEY|LASTFM_API_SECRET|WAKATIME_API_KEY|STRAVA_(?:ACCESS|REFRESH)_TOKEN|POSH_OWM_API_KEY|OLLAMA_API_KEY|UPTIME_WATCHER_GOOGLE_CLIENT_SECRET)(?:["']?\s*[:=]\s*|["']?\s*,\s*)["']?([A-Za-z0-9+/_=.-]{8,})["']?'''
+    regex       = '''(?i)(?:\$env:|["']?)(NODE_AUTH_TOKEN|SONAR_TOKEN|NPM_TOKEN|PRIVATE_TOKEN|GOOGLE_API_KEY|CODECOV_TOKEN(?:_FFV)?|STRYKER_DASHBOARD_API_KEY|(?:UW|TF)_STRYKER_DASHBOARD_API_KEY|PAT_TOKEN|GITHUB_TOKEN|GITHUB_PAT|PSGalleryApiKey|NuGetApiKey|NUGET_KEY|LASTFM_API_KEY|LASTFM_API_SECRET|WAKATIME_API_KEY|STRAVA_(?:ACCESS|REFRESH)_TOKEN|POSH_OWM_API_KEY|OLLAMA_API_KEY|UPTIME_WATCHER_GOOGLE_CLIENT_SECRET)(?:["']?\s*=\s*["']?|["']?\s*[:]\s*["']|["']?\s*,\s*["'])([A-Za-z0-9+/_=.-]{8,})["']?'''
     secretGroup = 2
     keywords    = [ "API_KEY", "CLIENT_SECRET", "PAT", "SECRET", "TOKEN" ]
     tags        = [ "environment", "powershell", "secrets" ]

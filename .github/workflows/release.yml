@@ -118,8 +118,19 @@ jobs:
               with:
                   node-version-file: ".node-version"
                   registry-url: "${{ env.NPM_REGISTRY_URL }}"
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
+                  # setup-node would invoke the bundled npm 11 before this workflow can
+                  # install the npm 12 version required by devEngines.
+                  package-manager-cache: false
+
+            - name: "Install exact npm version"
+              run: |
+                  set -euo pipefail
+                  package_manager=$(node -p "require('./package.json').packageManager")
+                  expected_version="${package_manager#npm@}"
+                  cd "${RUNNER_TEMP}"
+                  npm install --global "$package_manager" --ignore-scripts
+                  actual_version=$(npm --version)
+                  test "$actual_version" = "$expected_version"
 
             - name: "Install native lint tools"
               run: |
@@ -130,7 +141,7 @@ jobs:
                   echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
 
             - name: "Install dependencies"
-              run: "npm ci --force"
+              run: "npm ci"
 
             - name: "Configure Git for release automation"
               if: "github.event_name == 'workflow_dispatch'"
@@ -273,7 +284,14 @@ jobs:
                     exit 1
                   fi
 
-                  git add -A
+                  unexpected_files=$(git diff --name-only -- . ':(exclude)package.json' ':(exclude)package-lock.json')
+                  if [ -n "$unexpected_files" ]; then
+                    echo "Release versioning modified unexpected tracked files:" >&2
+                    printf '%s\n' "$unexpected_files" >&2
+                    exit 1
+                  fi
+
+                  git add -- package.json package-lock.json
                   if git diff --cached --quiet; then
                     echo "No staged changes found for release commit." >&2
                     exit 1

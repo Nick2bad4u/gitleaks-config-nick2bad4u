@@ -12,7 +12,7 @@ import * as path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 
-const fallbackGitleaksVersion = "v8.25.0";
+const fallbackGitleaksVersion = "v8.30.1";
 const gitleaksModule = `github.com/zricethezav/gitleaks/v8@${fallbackGitleaksVersion}`;
 const repoRoot = fileURLToPath(new URL("..", import.meta.url));
 const fixtureDirectory = path.join(repoRoot, ".gitleaks-smoke");
@@ -215,6 +215,21 @@ const main = () => {
                 ].join("\n")
             )
         );
+        assertCleanSource(
+            writeFixture(
+                "safe-destructuring.mjs",
+                [
+                    "const processEnvironment = process.env;",
+                    "const {",
+                    "    NPM_TOKEN,",
+                    '    STRYKER_DASHBOARD_API_KEY: dashboardApiKey = "",',
+                    "    anotherIdentifier,",
+                    "} = processEnvironment;",
+                    "void dashboardApiKey;",
+                    "",
+                ].join("\n")
+            )
+        );
         assertLeakingSource(
             writeFixture(
                 "leaking.env",
@@ -228,6 +243,24 @@ const main = () => {
                             "1234567890",
                         ].join("_"),
                     ].join("="),
+                    "",
+                ].join("\n")
+            ),
+            "nick2bad4u-sensitive-env-vars"
+        );
+        assertLeakingSource(
+            writeFixture(
+                "leaking-object.mjs",
+                [
+                    "const credentials = {",
+                    `    NPM_TOKEN: "${[
+                        "npm",
+                        "secret",
+                        "value",
+                        "1234567890",
+                    ].join("_")}",`,
+                    "};",
+                    "void credentials;",
                     "",
                 ].join("\n")
             ),

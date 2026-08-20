@@ -130,25 +130,31 @@
         "vitest": "^4.1.10",
         "yamllint-config-nick2bad4u": "^1.1.1"
     },
-    "packageManager": "npm@12.0.1",
+    "packageManager": "npm@12.0.2",
     "engines": {
         "node": ">=22.0.0"
     },
     "devEngines": {
         "runtime": {
             "name": "node",
-            "version": ">=22.0.0",
+            "version": "^22.22.2 || ^24.15.0 || >=26.0.0",
             "onFail": "error"
         },
         "packageManager": {
             "name": "npm",
-            "version": ">=11.0.0",
+            "version": "12.0.2",
             "onFail": "error"
         }
     },
     "publishConfig": {
         "provenance": true,
         "registry": "https://registry.npmjs.org/"
+    },
+    "allowScripts": {
+        "core-js@3.49.0": false,
+        "esbuild@0.28.1": true,
+        "fsevents@2.3.3": true,
+        "unrs-resolver@1.12.2": true
     },
     "readme": "README.md"
 }
