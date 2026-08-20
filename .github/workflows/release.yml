@@ -118,8 +118,9 @@ jobs:
               with:
                   node-version-file: ".node-version"
                   registry-url: "${{ env.NPM_REGISTRY_URL }}"
-                  cache: "npm"
-                  cache-dependency-path: "package-lock.json"
+                  # setup-node would invoke the bundled npm 11 before this workflow can
+                  # install the npm 12 version required by devEngines.
+                  package-manager-cache: false
 
             - name: "Install exact npm version"
               run: |
