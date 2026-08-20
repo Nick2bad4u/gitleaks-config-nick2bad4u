@@ -15,7 +15,7 @@ This package publishes a raw `gitleaks.toml` file plus a typed Node helper for t
 
 - extends the built-in Gitleaks rule set with `useDefault = true`;
 - disables the noisy `generic-api-key` default rule;
-- adds focused checks for database connection strings with embedded credentials, high-signal Vite secret variable names, and known sensitive Nick2bad4u environment variable assignments;
+- adds focused checks for database connection strings with embedded credentials, high-signal Vite secret variable names, and known sensitive Nick2bad4u environment variables in equals-style or quoted mapping assignments;
 - keeps global allowlists narrow and explicit.
 
 It does not wrap Gitleaks in a custom CLI. Consumers should keep using Gitleaks' native `--config`, `GITLEAKS_CONFIG`, or repository `.gitleaks.toml` loading paths.
